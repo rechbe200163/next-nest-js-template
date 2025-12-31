@@ -13,38 +13,46 @@ datasource db {
   provider = "postgresql"
 }
 
-generator nestjsDto {
-  provider                        = "prisma-generator-nestjs-dto"
-  output                          = "../../../apps/api/dtos/generated"
-  prismaClientImportPath          = ""
-  outputToNestJsResourceStructure = "false"
-  flatResourceStructure           = "false"
-  exportRelationModifierClasses   = "true"
-  reExport                        = "true"
-  generateFileTypes               = "all"
-  createDtoPrefix                 = "Create"
-  updateDtoPrefix                 = "Update"
-  dtoSuffix                       = "Dto"
-  entityPrefix                    = ""
-  entitySuffix                    = ""
-  classValidation                 = "false"
-  fileNamingStyle                 = "camel"
-  noDependencies                  = "false"
-  outputType                      = "class"
-  definiteAssignmentAssertion     = "false"
-  requiredResponseApiProperty     = "true"
-  prettier                        = "true"
-  wrapRelationsAsType             = "true"
-  showDefaultValues               = "true"
-}
+//  generator nestjsDto {
+//    provider                        = "prisma-generator-nestjs-dto"
+//    output                          = "../../../apps/api/dtos/generated"
+//    prismaClientImportPath          = ""
+//    outputToNestJsResourceStructure = "false"
+//    flatResourceStructure           = "false"
+//    exportRelationModifierClasses   = "true"
+//    reExport                        = "true"
+//    generateFileTypes               = "all"
+//    createDtoPrefix                 = "Create"
+//    updateDtoPrefix                 = "Update"
+//    dtoSuffix                       = "Dto"
+//    entityPrefix                    = ""
+//    entitySuffix                    = "Entity"
+//    enableSwaggerDecorators         = "true"
+//    enableClassTransformerDecorators = "true"
+//    classValidation                 = "false"
+//    fileNamingStyle                 = "camel"
+//    noDependencies                  = "false"
+//    outputType                      = "class"
+//    definiteAssignmentAssertion     = "false"
+//    requiredResponseApiProperty     = "true"
+//    prettier                        = "true"
+//    wrapRelationsAsType             = "true"
+//    showDefaultValues               = "true"
+//  }
 
 model User {
   id            String    @id @default(cuid())
-  /// @description Name of the user
+  /// @description First name of the user
   /// @minimum 5
-  name          String?
+  firstName     String?
+  /// @description Last name of the user
+  /// @minimum 5
+  lastName      String
   /// @description Email of the user
   email         String?   @unique
   /// @description Date of email verification
   emailVerified DateTime?
+  /// @description Hashed password of the user
+  /// @minimum 10
+  password      String
 }

@@ -1,17 +1,27 @@
 {
   "name": "@workspace/database",
   "version": "1.0.0",
+  "private": true,
   "exports": {
-    ".": "./src/client.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
   },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "db:migrate:deploy": "prisma migrate deploy --schema=./prisma/schema.prisma",
     "db:migrate:dev": "prisma migrate dev --schema=./prisma/schema.prisma",
     "db:push": "prisma db push --schema=./prisma/schema.prisma",
     "db:seed": "tsx ./prisma/seed.ts",
-    "dev": "tsup src/* --watch",
-    "format": "prisma format --schema=./prisma/schema.prisma",
     "generate": "prisma generate --schema=./prisma/schema.prisma",
+    "build": "tsup src/index.ts --format esm,cjs --dts --clean",
+    "dev": "tsup src/index.ts --format esm,cjs --dts --watch",
+    "format": "prisma format --schema=./prisma/schema.prisma",
     "lint": "eslint . --max-warnings 0",
     "prebuild": "npm run generate",
     "predev": "npm run generate",
@@ -19,7 +29,6 @@
   },
   "dependencies": {
     "@brakebein/prisma-generator-nestjs-dto": "^1.29.0",
-    "@nestjs/swagger": "^11.2.3",
     "@prisma/client": "latest"
   },
   "devDependencies": {
