@@ -2,13 +2,16 @@
   "name": "@workspace/database",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
     }
   },
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "files": [
     "dist"
@@ -19,8 +22,8 @@
     "db:push": "prisma db push --schema=./prisma/schema.prisma",
     "db:seed": "tsx ./prisma/seed.ts",
     "generate": "prisma generate --schema=./prisma/schema.prisma",
-    "build": "tsup src/index.ts --format esm,cjs --dts --clean",
-    "dev": "tsup src/index.ts --format esm,cjs --dts --watch",
+    "build": "tsup --config tsup.config.ts",
+    "dev": "tsup --config tsup.config.ts --watch",
     "format": "prisma format --schema=./prisma/schema.prisma",
     "lint": "eslint . --max-warnings 0",
     "prebuild": "npm run generate",

@@ -19,7 +19,7 @@ import {
 } from '@nestjs/swagger';
 import { AuthInputDto } from './dto/auth-input.dto';
 import { AuthResultDto } from './dto/auth-result.dto';
-import { Request } from 'express';
+import { RequestWithUser } from 'lib/types';
 
 @Controller('auth')
 export class AuthController {
@@ -40,7 +40,7 @@ export class AuthController {
   @Get('get-profile')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, ThrottlerGuard)
-  getProfile(@Request() request) {
+  getProfile(@Request() request: RequestWithUser) {
     return request.user;
   }
 }
