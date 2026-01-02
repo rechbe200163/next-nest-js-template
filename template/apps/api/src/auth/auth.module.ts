@@ -5,6 +5,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { UsersModule } from 'src/users/users.module';
+import { ConfigService } from '@nestjs/config';
 // import { TypedEventEmitterModule } from 'src/event-emitter/event-emitter.module';
 @Module({
   providers: [AuthService, JwtStrategy],
@@ -12,10 +13,13 @@ import { UsersModule } from 'src/users/users.module';
   imports: [
     UsersModule,
     // TypedEventEmitterModule,
-    JwtModule.register({
+    JwtModule.registerAsync({
       global: true,
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '30m' },
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.get<string>('JWT_SECRET', ''),
+        signOptions: { expiresIn: '30m' },
+      }),
     }),
     PassportModule,
   ],
