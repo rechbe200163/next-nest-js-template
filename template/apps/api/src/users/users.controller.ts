@@ -9,16 +9,24 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { ApiResponse } from '@nestjs/swagger';
+import {
+  ApiNoContentResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @ApiOperation({ summary: 'creates a users' })
   @ApiResponse({
     type: UserEntity,
     status: HttpStatus.CREATED,
@@ -29,19 +37,20 @@ export class UsersController {
   }
 
   @Get()
-  @ApiResponse({
+  @ApiOperation({ summary: 'returns a list of users' })
+  @ApiOkResponse({
     type: [UserEntity],
-    status: HttpStatus.OK,
     description: 'List of all users',
   })
+  @ApiOkResponse({})
   findAll() {
     return this.usersService.findAll();
   }
 
   @Get(':id')
-  @ApiResponse({
+  @ApiOperation({ summary: 'returns one user' })
+  @ApiOkResponse({
     type: UserEntity,
-    status: HttpStatus.OK,
     description: 'User found by ID',
   })
   findOne(@Param('id') id: string) {
@@ -49,9 +58,9 @@ export class UsersController {
   }
 
   @Patch(':id')
-  @ApiResponse({
+  @ApiOperation({ summary: 'updates a user and returns updated user entity' })
+  @ApiOkResponse({
     type: UserEntity,
-    status: HttpStatus.OK,
     description: 'User updated successfully',
   })
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
@@ -59,8 +68,8 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
+  @ApiOperation({ summary: 'deletes a user' })
+  @ApiNoContentResponse({
     description: 'User deleted successfully',
   })
   remove(@Param('id') id: string) {
