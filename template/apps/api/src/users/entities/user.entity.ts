@@ -40,13 +40,6 @@ export class UserEntity implements User {
     nullable: true,
   })
   email!: string;
-  @ApiProperty({
-    description: 'Date of email verification',
-    type: 'string',
-    format: 'date-time',
-    nullable: true,
-  })
-  emailVerified: Date | null;
 
   @ApiProperty({
     description: 'Hashed password of the user',
