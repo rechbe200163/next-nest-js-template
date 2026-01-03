@@ -48,10 +48,21 @@ model User {
   /// @minimum 5
   lastName      String
   /// @description Email of the user
-  email         String?   @unique
-  /// @description Date of email verification
-  emailVerified DateTime?
+  email         String   @unique
   /// @description Hashed password of the user
   /// @minimum 10
   password      String
+  todos Todo[]
+}
+
+model Todo {
+  id String @id @default(cuid())
+  /// @descritpion States if the todo is completed or not defaults to false
+  completed Boolean @default(false)
+  /// @descritpion description of the todo 
+  /// @maximum 255
+  description String @db.VarChar(255)
+  user User @relation(fields: [userId], references: [id])
+  /// @descritpion id of user who created the todo
+  userId String
 }
