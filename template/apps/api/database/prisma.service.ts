@@ -5,7 +5,10 @@ import { PrismaClient } from '@workspace/database';
 @Injectable()
 export class PrismaService extends PrismaClient {
   constructor() {
-    const adapter = new PrismaPg({ url: process.env.DATABASE_URL });
+    console.log('ENV URL:', process.env.DATABASE_URL);
+    const adapter = new PrismaPg({
+      connectionString: process.env.DATABASE_URL as string,
+    });
     super({ adapter });
   }
 }
