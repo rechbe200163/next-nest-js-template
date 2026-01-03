@@ -3,13 +3,17 @@ import { UsersRepository } from './users.repository';
 import { UserEntity } from './entities/user.entity';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
+import { hash } from 'bcryptjs';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly repo: UsersRepository) {}
 
   async create(dto: CreateUserDto): Promise<UserEntity> {
-    const user = await this.repo.create(dto);
+    const user = await this.repo.create({
+      ...dto,
+      password: await hash(dto.password, 10),
+    });
     return new UserEntity(user);
   }
 

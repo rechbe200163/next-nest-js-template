@@ -1,12 +1,17 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { compare } from 'bcryptjs';
+import { compare, hash } from 'bcryptjs';
 import { AuthInput, AuthResult } from 'lib/types';
 import { CreateUserDto } from 'src/users/dtos/create-user.dto';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { UsersRepository } from 'src/users/users.repository';
 
-export type JwtPayload = UserEntity;
+export type JwtPayload = {
+  sub: string;
+  email: string;
+  firstName: string | null;
+  lastName: string | null;
+};
 
 @Injectable()
 export class AuthService {
@@ -37,8 +42,17 @@ export class AuthService {
     return null;
   }
 
+  private buildJwtPayload(user: UserEntity): JwtPayload {
+    return {
+      sub: user.id,
+      email: user.email,
+      firstName: user.firstName ?? null,
+      lastName: user.lastName ?? null,
+    };
+  }
+
   async signIn(user: UserEntity): Promise<AuthResult> {
-    const accessToken = this.jwtService.sign(user);
+    const accessToken = this.jwtService.sign(this.buildJwtPayload(user));
     return {
       token: {
         accessToken,
@@ -54,7 +68,12 @@ export class AuthService {
   }
 
   async signUp(data: CreateUserDto): Promise<AuthResult> {
-    const user = new UserEntity(await this.userRepository.create(data));
+    const user = new UserEntity(
+      await this.userRepository.create({
+        ...data,
+        password: await hash(data.password, 10),
+      }),
+    );
     return this.signIn(user);
   }
 }
