@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcryptjs';
 import { AuthInput, AuthResult } from 'lib/types';
+import { CreateUserDto } from 'src/users/dtos/create-user.dto';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { UsersRepository } from 'src/users/users.repository';
 
@@ -24,7 +25,7 @@ export class AuthService {
       console.error('User not found or invalid credentials');
       throw new UnauthorizedException('Invalid credentials');
     }
-    return this.signIn(user);
+    return this.signIn(new UserEntity(user));
   }
 
   async validateUser(authInput: AuthInput): Promise<UserEntity | null> {
@@ -37,19 +38,23 @@ export class AuthService {
   }
 
   async signIn(user: UserEntity): Promise<AuthResult> {
-    const tokenPayload = new UserEntity(user);
-    const accessToken = this.jwtService.sign(tokenPayload);
+    const accessToken = this.jwtService.sign(user);
     return {
       token: {
         accessToken,
         issuedAt: Math.floor(Date.now()), // Current time in milliseconds
         expiresAt: Math.floor(Date.now()) + 30 * 60 * 1000, // 30 minutes later
       },
-      user: tokenPayload,
+      user: user,
     };
   }
 
   async renewSession(user: UserEntity): Promise<AuthResult> {
+    return this.signIn(user);
+  }
+
+  async signUp(data: CreateUserDto): Promise<AuthResult> {
+    const user = new UserEntity(await this.userRepository.create(data));
     return this.signIn(user);
   }
 }

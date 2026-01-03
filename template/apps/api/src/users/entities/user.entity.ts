@@ -36,9 +36,10 @@ export class UserEntity implements User {
   @ApiProperty({
     description: 'Email of the user',
     type: 'string',
+    required: true,
     nullable: true,
   })
-  email: string | null;
+  email!: string;
   @ApiProperty({
     description: 'Date of email verification',
     type: 'string',

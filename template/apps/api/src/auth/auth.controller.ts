@@ -20,6 +20,7 @@ import {
 import { AuthInputDto } from './dto/auth-input.dto';
 import { AuthResultDto } from './dto/auth-result.dto';
 import { RequestWithUser } from 'lib/types';
+import { CreateUserDto } from 'src/users/dtos/create-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -35,6 +36,14 @@ export class AuthController {
   login(@Body() body: AuthInputDto) {
     console.log('Received login request:', body);
     return this.authService.authenticate(body);
+  }
+
+  @Post('signUp')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiBody({ type: CreateUserDto })
+  signUp(@Body() body: CreateUserDto) {
+    console.log(body);
+    return this.authService.signUp(body);
   }
 
   @Get('get-profile')

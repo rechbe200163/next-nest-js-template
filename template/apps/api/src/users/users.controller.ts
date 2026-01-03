@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import {
+  ApiBody,
   ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
@@ -27,12 +28,15 @@ export class UsersController {
 
   @Post()
   @ApiOperation({ summary: 'creates a users' })
-  @ApiResponse({
+  @ApiOkResponse({
     type: UserEntity,
-    status: HttpStatus.CREATED,
     description: 'User created successfully',
   })
+  @ApiBody({
+    type: CreateUserDto,
+  })
   create(@Body() createUserDto: CreateUserDto) {
+    console.log(createUserDto);
     return this.usersService.create(createUserDto);
   }
 
