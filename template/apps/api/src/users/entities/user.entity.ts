@@ -1,6 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { User } from '@workspace/database';
 import { Exclude } from 'class-transformer';
+import {
+  TodoEntity,
+  type TodoEntity as TodoEntityAsType,
+} from 'src/todos/entities/todo.entity';
 
 export class UserEntity implements User {
   /*
@@ -48,4 +52,11 @@ export class UserEntity implements User {
   })
   @Exclude()
   password: string;
+
+  @ApiProperty({
+    type: () => TodoEntity,
+    isArray: true,
+    required: false,
+  })
+  todos?: TodoEntityAsType[];
 }
