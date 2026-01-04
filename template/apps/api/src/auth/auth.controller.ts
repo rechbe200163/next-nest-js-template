@@ -30,9 +30,6 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiBody({ type: AuthInputDto })
   @ApiOkResponse({ type: AuthResultDto })
-  @ApiUnauthorizedResponse({
-    description: 'Invalid credentials',
-  })
   login(@Body() body: AuthInputDto) {
     console.log('Received login request:', body);
     return this.authService.authenticate(body);

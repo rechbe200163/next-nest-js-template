@@ -7,7 +7,7 @@ import { UserEntity } from 'src/users/entities/user.entity';
 import { UsersRepository } from 'src/users/users.repository';
 
 export type JwtPayload = {
-  sub: string;
+  id: string;
   email: string;
   firstName: string | null;
   lastName: string | null;
@@ -44,7 +44,7 @@ export class AuthService {
 
   private buildJwtPayload(user: UserEntity): JwtPayload {
     return {
-      sub: user.id,
+      id: user.id,
       email: user.email,
       firstName: user.firstName ?? null,
       lastName: user.lastName ?? null,
