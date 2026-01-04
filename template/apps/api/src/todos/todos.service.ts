@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { TodoRepository } from './todos.repository';
-import { TodoEntity } from 'dtos/generated';
+import { TodoEntity } from './entities/todo.entity';
 
 @Injectable()
 export class TodosService {
