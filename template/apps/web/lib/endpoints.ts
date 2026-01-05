@@ -1,8 +1,13 @@
 export const ENDPOINTS = {
   AUTH: {
     LOGIN: 'auth/signIn',
-    OTP: (tenantSlug: string, otp: number) => `auth/otp/${tenantSlug}/${otp}`,
     RENEW_SESSION: 'auth/renewSession',
+  },
+  TODOS: {
+    GET: 'todos',
+    PATCH: (id: number) => `todos/${id}`,
+    POST: '',
+    DELETE: (id: number) => `todos/${id}`,
   },
 } as const;
 

@@ -14,6 +14,7 @@ import { IconEye, IconEyeOff, IconLock } from '@tabler/icons-react';
 import { cn } from '@workspace/ui/lib/utils';
 import { Button } from '@workspace/ui/components/button';
 import { Spinner } from '@workspace/ui/components/spinner';
+import { signInAction } from '@/lib/actions/auth/signin.action';
 
 export function LoginForm({
   className,
@@ -23,7 +24,7 @@ export function LoginForm({
   const [email, setEmail] = useState('');
 
   const [password, setPassword] = useState('');
-  const [_formState, action, isLoading] = useActionState(logIn, {
+  const [_formState, action, isLoading] = useActionState(signInAction, {
     success: false,
     errors: { title: [] as string[] },
   });
@@ -111,6 +112,8 @@ export function LoginForm({
                     </>
                   )}
                 </Button>
+                <span>{_formState.message}</span>
+                <span>{_formState.success}</span>
                 <p className='text-center text-sm text-muted-foreground'>
                   Erster Login?
                   <a
