@@ -3,7 +3,7 @@ import { apiClient } from '@/lib/api-client.server';
 import { setCookie } from '@/lib/auth/cookie';
 import { ENDPOINTS } from '@/lib/endpoints';
 import { FormState } from '@/lib/fom.types';
-import { AuthResult } from '@workspace/types';
+import { Session } from '@workspace/types';
 import { redirect } from 'next/navigation';
 
 export async function signInAction(
@@ -23,7 +23,7 @@ export async function signInAction(
   const payload = { email: email, password: password };
 
   try {
-    const resp = await apiClient.post<AuthResult, typeof payload>(
+    const resp = await apiClient.post<Session, typeof payload>(
       ENDPOINTS.AUTH.LOGIN,
       { body: payload }
     );

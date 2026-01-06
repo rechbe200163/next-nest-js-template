@@ -1,5 +1,4 @@
-// lib/api-client.server.ts
-import 'server-only';
+'server-only';
 
 import { forbidden } from 'next/navigation';
 import { ApiClient } from '@workspace/api-client/src/core';

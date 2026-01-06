@@ -5,9 +5,9 @@ export const ENDPOINTS = {
   },
   TODOS: {
     GET: 'todos',
-    PATCH: (id: number) => `todos/${id}`,
-    POST: '',
-    DELETE: (id: number) => `todos/${id}`,
+    PATCH: (id: string) => `todos/${id}`,
+    POST: 'todos',
+    DELETE: (id: string) => `todos/${id}`,
   },
 } as const;
 
