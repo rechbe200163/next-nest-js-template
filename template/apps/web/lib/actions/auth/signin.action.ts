@@ -34,12 +34,9 @@ export async function signInAction(
       expiresAt: resp.token.expiresAt,
     });
     await setCookie('user', resp.user);
-    return {
-      success: true,
-      message: 'User Logged in now',
-    };
   } catch (error: any) {
     console.error('Login error:', error);
     return { success: false, errors: { title: [error.message] } };
   }
+  redirect('/');
 }

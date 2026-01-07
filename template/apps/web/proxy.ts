@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Locale } from './i18n/config';
-import { Token } from '@workspace/types';
-import { User } from '../../packages/database/src';
+import { SanitizedUser, Token } from '@workspace/types';
 
 export const ROOT = '/';
 export const PUBLIC_ROUTES = [
@@ -17,15 +16,13 @@ export const config = {
 };
 
 const COOKIE_NAME = 'NEXT_LOCALE';
-type SanitizedUser = Omit<User, 'password'>;
 
 export default async function middleware(request: NextRequest) {
   const userCookie = request.cookies.get('user');
   const tokenCookie = request.cookies.get('token');
-  const tenantCookie = request.cookies.get('tenant');
 
   let session: any = null;
-  if (userCookie && tokenCookie && tenantCookie) {
+  if (userCookie && tokenCookie) {
     try {
       const user: SanitizedUser = JSON.parse(userCookie.value);
       const token: Token = JSON.parse(tokenCookie.value);
