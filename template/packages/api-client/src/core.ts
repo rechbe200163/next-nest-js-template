@@ -1,3 +1,5 @@
+import { FormState } from '../../../apps/web/lib/fom.types';
+
 export class ApiError extends Error {
   constructor(
     message: string,
@@ -148,5 +150,88 @@ export class ApiClient {
       undefined,
       opts?.headers
     );
+  }
+
+  public async safePost<TResponse extends { id?: string | number }, TBody>(
+    path: string,
+    opts?: RequestOptions<TBody>
+  ): Promise<FormState> {
+    try {
+      const data = await this.post<TResponse, TBody>(path, opts);
+
+      return {
+        success: true,
+        message: 'OK',
+        data: data?.id,
+      };
+    } catch (err) {
+      return this.mapError(err);
+    }
+  }
+
+  public async safeGet<TResponse extends { id?: string | number }>(
+    path: string,
+    opts?: { query?: Record<string, any> }
+  ): Promise<FormState> {
+    try {
+      const data = await this.get<TResponse>(path, opts);
+
+      return {
+        success: true,
+        message: 'OK',
+        data: data?.id,
+      };
+    } catch (err) {
+      return this.mapError(err);
+    }
+  }
+
+  public async safePatch<TResponse extends { id?: string | number }, TBody>(
+    path: string,
+    body: TBody
+  ): Promise<FormState> {
+    try {
+      const data = await this.patch<TResponse, TBody>(path, body);
+
+      return {
+        success: true,
+        message: 'OK',
+        data: data?.id,
+      };
+    } catch (err) {
+      return this.mapError(err);
+    }
+  }
+
+  public async safeDelete(path: string): Promise<FormState> {
+    try {
+      await this.delete(path);
+
+      return {
+        success: true,
+        message: 'OK',
+      };
+    } catch (err) {
+      return this.mapError(err);
+    }
+  }
+
+  // ---------------------------
+  // Fehler-Mapping → immer FormState
+  // ---------------------------
+  private mapError(err: any): FormState {
+    if (err instanceof ApiError) {
+      return {
+        success: false,
+        message: err.message,
+        errors: err.errors,
+      };
+    }
+
+    // technische Fehler (Network, Timeout, etc.)
+    return {
+      success: false,
+      message: 'Interner Fehler – bitte später erneut versuchen.' + err,
+    };
   }
 }

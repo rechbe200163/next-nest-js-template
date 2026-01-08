@@ -1,3 +1,5 @@
+import { User } from '../database/src';
+
 export interface Token {
   accessToken: string;
   issuedAt: number;
@@ -6,13 +8,7 @@ export interface Token {
 
 export interface Session {
   token: Token;
-  user: SanitizedUser;
+  user: Omit<User, 'password'>;
 }
 
-export interface SanitizedUser {
-  id: string;
-  email: string;
-  firstName?: string;
-  lastName?: string;
-  avatarUrl?: string;
-}
+export type SanitizedUser = Omit<User, 'password'>;
